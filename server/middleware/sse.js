@@ -32,7 +32,7 @@ function middleware() {
 		ctx.set('Cache-Control', 'no-cache, no-transform')
 		ctx.set('Connection', 'keep-alive')
 
-		const {custom = 'general'} = ctx.query
+		const {custom} = ctx.query
 		const eventName = name(custom)
 
 		const sse = new SSEStream()
