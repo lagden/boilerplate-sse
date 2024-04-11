@@ -1,7 +1,10 @@
+#!/usr/bin/env node
+
 import '../cli/reset.js'
 
+import process from 'node:process'
 import {Agent} from 'node:http'
-// import {setTimeout} from 'node:timers/promises'
+import {setTimeout} from 'node:timers/promises'
 import {URL} from 'node:url'
 import {after, before, test} from 'node:test'
 import assert from 'node:assert/strict'
@@ -22,9 +25,10 @@ before(async () => {
 	;({server, prefixUrl} = await start())
 })
 
-after(() => {
-	console.log('after >>>')
+after(async () => {
+	await setTimeout(1000)
 	stop(server)
+	process.exit(0)
 })
 
 test('/emit/:msg', async () => {
@@ -72,6 +76,7 @@ test('sse', (...args) => {
 
 	got.get(`${prefixUrl}/emit/go?custom=test`).then(async () => {
 		await got.get(`${prefixUrl}/clear`)
+		stream.end()
 		agent.destroy()
 	})
 })
